@@ -26,9 +26,6 @@ CREATE TABLE "contact" (
 CREATE UNIQUE INDEX "client_email_key" ON "client"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "client_phone_key" ON "client"("phone");
-
--- CreateIndex
 CREATE UNIQUE INDEX "contact_email_key" ON "contact"("email");
 
 -- CreateIndex

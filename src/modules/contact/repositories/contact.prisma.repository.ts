@@ -30,6 +30,20 @@ export class ContactPrismaRepository implements ContactRepository {
     return contact;
   }
 
+  async findOneByEmail(email: string): Promise<Contact> {
+    const contact = await this.prisma.contact.findUnique({
+      where: { email },
+    });
+    return contact;
+  }
+
+  async findOneByPhone(phone: string): Promise<Contact> {
+    const contact = await this.prisma.contact.findUnique({
+      where: { phone },
+    });
+    return contact;
+  }
+
   async update(id: string, data: UpdateContactDto): Promise<Contact> {
     const contact = await this.prisma.contact.update({
       where: { id },

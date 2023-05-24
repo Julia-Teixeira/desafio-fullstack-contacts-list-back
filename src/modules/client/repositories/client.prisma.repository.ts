@@ -19,13 +19,23 @@ export class ClientPrismaRepository implements ClientRepository {
   }
 
   async findOne(id: string): Promise<Client> {
-    const client = await this.prisma.client.findUniqueOrThrow({
+    const client = await this.prisma.client.findUnique({
       where: { id },
       include: {
         contacts: true,
       },
     });
     return plainToInstance(Client, client);
+  }
+
+  async findOneByEmail(email: string): Promise<Client> {
+    const client = await this.prisma.client.findUnique({
+      where: { email },
+      include: {
+        contacts: true,
+      },
+    });
+    return client;
   }
 
   async update(id: string, data: CreateClientDto): Promise<Client> {
