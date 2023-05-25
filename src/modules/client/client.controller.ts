@@ -4,7 +4,6 @@ import {
   Post,
   Body,
   Patch,
-  Param,
   Delete,
   UseInterceptors,
   ClassSerializerInterceptor,
@@ -15,6 +14,8 @@ import { ClientService } from './client.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { CurrentClient } from '../auth/decorators/current-client.decorator';
+import { Client } from './entities/client.entity';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('client')
@@ -27,22 +28,22 @@ export class ClientController {
     return await this.clientService.create(createClientDto);
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return await this.clientService.findOne(id);
+  @Get('')
+  async findOne(@CurrentClient() client: Client) {
+    return await this.clientService.findOne(client.id);
   }
 
-  @Patch(':id')
+  @Patch('')
   async update(
-    @Param('id') id: string,
+    @CurrentClient() client: Client,
     @Body() updateClientDto: UpdateClientDto
   ) {
-    return await this.clientService.update(id, updateClientDto);
+    return await this.clientService.update(client.id, updateClientDto);
   }
 
   @HttpCode(204)
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return await this.clientService.remove(id);
+  @Delete('')
+  async remove(@CurrentClient() client: Client) {
+    return await this.clientService.remove(client.id);
   }
 }

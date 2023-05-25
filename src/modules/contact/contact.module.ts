@@ -6,8 +6,6 @@ import { ContactPrismaRepository } from './repositories/contact.prisma.repositor
 import { PrismaService } from 'src/database/prisma.service';
 import { ClientRepository } from '../client/repositories/client.repository';
 import { ClientPrismaRepository } from '../client/repositories/client.prisma.repository';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 
 @Module({
   controllers: [ContactController],
@@ -21,10 +19,6 @@ import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
     {
       provide: ClientRepository,
       useClass: ClientPrismaRepository,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
     },
   ],
   exports: [ContactService],

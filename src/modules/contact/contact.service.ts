@@ -39,20 +39,24 @@ export class ContactService {
     return contact;
   }
 
-  async findAll() {
-    return await this.contactRepository.findAll();
+  async findAll(id: string) {
+    return await this.contactRepository.findAll(id);
   }
 
-  async findOne(id: string) {
-    const findContact = await this.contactRepository.findOne(id);
+  async findOne(id: string, client_id: string) {
+    const findContact = await this.contactRepository.findOne(id, client_id);
     if (!findContact) {
       throw new NotFoundException('Contato não encontrado');
     }
     return findContact;
   }
 
-  async update(id: string, updateContactDto: UpdateContactDto) {
-    const findContact = await this.contactRepository.findOne(id);
+  async update(
+    id: string,
+    updateContactDto: UpdateContactDto,
+    client_id: string
+  ) {
+    const findContact = await this.contactRepository.findOne(id, client_id);
     if (!findContact) {
       throw new NotFoundException('Contato não encontrado');
     }
@@ -64,12 +68,12 @@ export class ContactService {
     return updatedContact;
   }
 
-  async remove(id: string) {
-    const findContact = await this.contactRepository.findOne(id);
+  async remove(id: string, client_id: string) {
+    const findContact = await this.contactRepository.findOne(id, client_id);
     if (!findContact) {
       throw new NotFoundException('Contato não encontrado');
     }
 
-    return await this.contactRepository.delete(id);
+    return await this.contactRepository.delete(id, client_id);
   }
 }
