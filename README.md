@@ -1,12 +1,9 @@
 ## Descrição
 
-<hr/>
-
 Este é o backend da aplicação Contact List - O objetivo dessa aplicação é criar um lista de contatos.
 
 ## Endpoins
 
-<hr/>
 A API tem um total de 3 endpoints, podendo cadastrar seu cliente, realizar login e cadastrar seus contatos.<br><br>
 
 <a href="https://insomnia.rest/run/?label=Contact%20List&uri=https%3A%2F%2Fgithub.com%2FJulia-Teixeira%2Fdesafio-fullstack-contacts-list%2Fblob%2Fdevelop%2Finsomnia_contactList.json" target="_blank"><img src="https://insomnia.rest/images/run.svg" alt="Run in Insomnia"></a>
@@ -46,7 +43,7 @@ Para utilização desta API você precisa seguir os seguintes passos:
 
 - Utilize a API normalmente
 
-<hr /> <br>
+<br>
 
 # Documentação
 
@@ -187,7 +184,7 @@ Campos que podem ser alterados: full_name, email, phone e password.
 
 Antes de apagar o cliente, certifique-se que ele não possui nenhum contato cadastrado.
 
-<hr><br>
+<br>
 
 <h2 align="center"> Contact</h2>
 
@@ -304,4 +301,4 @@ Campos que podem ser alterados: full_name, email e phone.
 
 Lembrando que o id do token tem que ser o mesmo do "dono" do contato.
 
-<hr><br>
+<br>
