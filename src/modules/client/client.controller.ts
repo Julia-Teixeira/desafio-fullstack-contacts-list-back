@@ -16,10 +16,12 @@ import { UpdateClientDto } from './dto/update-client.dto';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { CurrentClient } from '../auth/decorators/current-client.decorator';
 import { Client } from './entities/client.entity';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('client')
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('client')
-@UseGuards(JwtAuthGuard)
 export class ClientController {
   constructor(private readonly clientService: ClientService) {}
 
@@ -29,11 +31,13 @@ export class ClientController {
   }
 
   @Get('')
+  @UseGuards(JwtAuthGuard)
   async findOne(@CurrentClient() client: Client) {
     return await this.clientService.findOne(client.id);
   }
 
   @Patch('')
+  @UseGuards(JwtAuthGuard)
   async update(
     @CurrentClient() client: Client,
     @Body() updateClientDto: UpdateClientDto
@@ -43,6 +47,7 @@ export class ClientController {
 
   @HttpCode(204)
   @Delete('')
+  @UseGuards(JwtAuthGuard)
   async remove(@CurrentClient() client: Client) {
     return await this.clientService.remove(client.id);
   }

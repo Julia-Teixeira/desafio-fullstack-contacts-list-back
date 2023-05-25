@@ -18,7 +18,10 @@ import { UpdateContactDto } from './dto/update-contact.dto';
 import { CurrentClient } from '../auth/decorators/current-client.decorator';
 import { Client } from '../client/entities/client.entity';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('contact')
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('contact')
 @UseGuards(JwtAuthGuard)
