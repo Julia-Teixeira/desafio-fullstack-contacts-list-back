@@ -6,26 +6,60 @@ import {
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { ClientRepository } from './repositories/client.repository';
+import { v2 as cloudinary } from 'cloudinary';
+import { unlink } from 'fs';
 
 @Injectable()
 export class ClientService {
   constructor(private clientRepository: ClientRepository) {}
 
-  async create(createClientDto: CreateClientDto) {
+  async create(
+    createClientDto: CreateClientDto,
+    image_file: Express.Multer.File
+  ) {
     const findClient = await this.clientRepository.findOneByEmail(
       createClientDto.email
     );
     if (findClient) {
       throw new ConflictException('Cliente já existe!');
     }
-    const client = await this.clientRepository.create(createClientDto);
+
+    cloudinary.config({
+      cloud_name: process.env.CLOUD_NAME,
+      api_key: process.env.API_KEY,
+      api_secret: process.env.API_SECRET,
+    });
+
+    let image_url =
+      'https://res.cloudinary.com/dy1df0vcx/image/upload/v1685306215/user_image_xhxke1.png';
+
+    if (image_file) {
+      const uploadImage = await cloudinary.uploader.upload(
+        image_file.path,
+        { resource_type: 'image' },
+        (error, result) => {
+          return result;
+        }
+      );
+
+      unlink(image_file.path, (error) => {
+        if (error) console.log(error);
+      });
+
+      image_url = uploadImage.secure_url;
+    }
+
+    const client = await this.clientRepository.create({
+      ...createClientDto,
+      image: image_url,
+    });
     return client;
   }
 
   async findOne(id: string) {
     const findClient = await this.clientRepository.findOne(id);
     if (!findClient) {
-      throw new NotFoundException('Cliente não encontrado');
+      throw new NotFoundException('Cliente não encontrado!');
     }
     return findClient;
   }
