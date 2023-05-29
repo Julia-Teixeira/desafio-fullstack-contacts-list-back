@@ -11,6 +11,8 @@ import {
   HttpCode,
   Request,
   UseGuards,
+  UploadedFiles,
+  UploadedFile,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
@@ -19,9 +21,11 @@ import { CurrentClient } from '../auth/decorators/current-client.decorator';
 import { Client } from '../client/entities/client.entity';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
 
 @ApiBearerAuth()
-@ApiTags('contact')
+@ApiTags('Contact')
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('contact')
 @UseGuards(JwtAuthGuard)
@@ -29,25 +33,40 @@ export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 
   @Post('')
-  create(
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @UseInterceptors(FileInterceptor('image'))
+  async create(
+    @UploadedFile()
+    image: Express.Multer.File,
     @CurrentClient() client: Client,
     @Body() createContactDto: CreateContactDto
   ) {
-    return this.contactService.create(client.id, createContactDto);
+    return this.contactService.create(
+      client.id,
+      createContactDto,
+      image ? image[0] : null
+    );
   }
 
   @Get('')
-  findAll(@Request() req: Request, @CurrentClient() client: Client) {
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async findAll(@Request() req: Request, @CurrentClient() client: Client) {
     return this.contactService.findAll(client.id);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @CurrentClient() client: Client) {
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async findOne(@Param('id') id: string, @CurrentClient() client: Client) {
     return this.contactService.findOne(id, client.id);
   }
 
   @Patch(':id')
-  update(
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async update(
     @Param('id') id: string,
     @Body() updateContactDto: UpdateContactDto,
     @CurrentClient() client: Client
@@ -57,7 +76,9 @@ export class ContactController {
 
   @HttpCode(204)
   @Delete(':id')
-  remove(@Param('id') id: string, @CurrentClient() client: Client) {
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async remove(@Param('id') id: string, @CurrentClient() client: Client) {
     return this.contactService.remove(id, client.id);
   }
 }

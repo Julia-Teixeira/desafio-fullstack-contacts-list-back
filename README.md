@@ -31,7 +31,7 @@ Para utilização desta API você precisa seguir os seguintes passos:
   ```
 - Preencha corretamente as variáveis de ambient;
 - Digite o comando npm, pnpm ou yarn prisma migrate dev, isso criará as tabelas que são necessárias;
-- Digite o comando npm, pnpm ou yarn run start:dev, isso colocará a API em funcionamento no seguinte endereço: http://localhost:3333;
+- Digite o comando npm, pnpm ou yarn run start:dev, isso colocará a API em funcionamento no seguinte endereço: http://localhost:8080;
 
   ```bash
   # development
@@ -49,6 +49,8 @@ Para utilização desta API você precisa seguir os seguintes passos:
 <hr /> <br>
 
 # Documentação
+
+Também pode ser encontrado no link: http://localhost:8080/api
 
 ## Rotas que não precisão de autenticação
 
