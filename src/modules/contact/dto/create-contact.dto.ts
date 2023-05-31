@@ -25,7 +25,7 @@ export class CreateContactDto {
   @IsOptional()
   @ApiProperty({
     description: 'Imagem do contato',
-    type: String,
+    type: 'file',
   })
-  image: string;
+  image: Express.Multer.File;
 }

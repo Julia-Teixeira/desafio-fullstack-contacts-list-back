@@ -12,6 +12,10 @@ export abstract class ContactRepository {
   abstract findOne(id: string, client_id: string): Promise<Contact | undefined>;
   abstract findOneByEmail(email: string): Promise<Contact | undefined>;
   abstract findOneByPhone(phone: string): Promise<Contact | undefined>;
-  abstract update(id: string, data: UpdateContactDto): Promise<Contact>;
+  abstract update(
+    id: string,
+    data: UpdateContactDto,
+    image: string
+  ): Promise<Contact>;
   abstract delete(id: string, client_id: string): Promise<void>;
 }

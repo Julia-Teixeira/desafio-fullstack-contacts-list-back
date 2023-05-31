@@ -9,9 +9,9 @@ import { plainToInstance } from 'class-transformer';
 export class ClientPrismaRepository implements ClientRepository {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: CreateClientDto): Promise<Client> {
+  async create(data: CreateClientDto, image: string): Promise<Client> {
     const client = new Client();
-    Object.assign(client, { ...data });
+    Object.assign(client, { ...data, image: image });
     const newClient = await this.prisma.client.create({
       data: { ...client },
     });
@@ -38,10 +38,14 @@ export class ClientPrismaRepository implements ClientRepository {
     return client;
   }
 
-  async update(id: string, data: CreateClientDto): Promise<Client> {
+  async update(
+    id: string,
+    data: CreateClientDto,
+    image_url: string
+  ): Promise<Client> {
     const client = await this.prisma.client.update({
       where: { id },
-      data: { ...data },
+      data: { ...data, image: image_url },
     });
     return plainToInstance(Client, client);
   }

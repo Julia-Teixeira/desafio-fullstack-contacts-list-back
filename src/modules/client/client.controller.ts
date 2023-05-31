@@ -47,11 +47,16 @@ export class ClientController {
   @Patch('')
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('image'))
   async update(
     @CurrentClient() client: Client,
-    @Body() updateClientDto: UpdateClientDto
+    @Body() updateClientDto: UpdateClientDto,
+    @UploadedFile()
+    image: Express.Multer.File
   ) {
-    return await this.clientService.update(client.id, updateClientDto);
+    console.log(image);
+
+    return await this.clientService.update(client.id, updateClientDto, image);
   }
 
   @HttpCode(204)

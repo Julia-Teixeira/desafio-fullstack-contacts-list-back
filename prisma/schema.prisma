@@ -23,8 +23,8 @@ model Client {
 model Contact {
   id         String   @id @db.Uuid
   full_name  String   @db.VarChar(125)
-  email      String   @unique @db.VarChar(100)
-  phone      String   @unique @db.VarChar(16)
+  email      String   @db.VarChar(100)
+  phone      String   @db.VarChar(16)
   image      String   @db.Text()
   created_at DateTime @default(now())
   client     Client   @relation(fields: [client_id], references: [id])
