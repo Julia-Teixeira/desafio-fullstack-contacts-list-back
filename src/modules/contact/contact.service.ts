@@ -90,16 +90,45 @@ export class ContactService {
   async update(
     id: string,
     updateContactDto: UpdateContactDto,
-    client_id: string
+    client_id: string,
+    image_file: Express.Multer.File
   ) {
+    cloudinary.config({
+      cloud_name: process.env.CLOUD_NAME,
+      api_key: process.env.API_KEY,
+      api_secret: process.env.API_SECRET,
+    });
+
+    let image;
+    if (image_file) {
+      const uploadImage = await cloudinary.uploader.upload(
+        image_file.path,
+        { resource_type: 'image' },
+        (error, result) => {
+          return result;
+        }
+      );
+
+      unlink(image_file.path, (error) => {
+        if (error) console.log(error);
+      });
+
+      image = uploadImage.secure_url;
+    }
+
     const findContact = await this.contactRepository.findOne(id, client_id);
     if (!findContact) {
       throw new NotFoundException('Contato não encontrado');
     }
 
+    if (!image) {
+      image = findContact.image;
+    }
+
     const updatedContact = await this.contactRepository.update(
       id,
-      updateContactDto
+      updateContactDto,
+      image
     );
     return updatedContact;
   }

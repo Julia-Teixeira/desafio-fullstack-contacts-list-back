@@ -49,10 +49,12 @@ export class ClientService {
       image_url = uploadImage.secure_url;
     }
 
-    const client = await this.clientRepository.create({
-      ...createClientDto,
-      image: image_url,
-    });
+    const client = await this.clientRepository.create(
+      {
+        ...createClientDto,
+      },
+      image_url
+    );
     return client;
   }
 
@@ -79,15 +81,44 @@ export class ClientService {
     }
     return null;
   }
-  async update(id: string, updateClientDto: UpdateClientDto) {
+  async update(
+    id: string,
+    updateClientDto: UpdateClientDto,
+    image_file: Express.Multer.File
+  ) {
     const findClient = await this.clientRepository.findOne(id);
     if (!findClient) {
       throw new NotFoundException('Cliente não encontrado');
     }
 
+    cloudinary.config({
+      cloud_name: process.env.CLOUD_NAME,
+      api_key: process.env.API_KEY,
+      api_secret: process.env.API_SECRET,
+    });
+
+    let image_url = findClient.image;
+
+    if (image_file) {
+      const uploadImage = await cloudinary.uploader.upload(
+        image_file.path,
+        { resource_type: 'image' },
+        (error, result) => {
+          return result;
+        }
+      );
+
+      unlink(image_file.path, (error) => {
+        if (error) console.log(error);
+      });
+
+      image_url = uploadImage.secure_url;
+    }
+
     const updatedClient = await this.clientRepository.update(
       id,
-      updateClientDto
+      updateClientDto,
+      image_url
     );
     return updatedClient;
   }

@@ -11,7 +11,6 @@ import {
   HttpCode,
   Request,
   UseGuards,
-  UploadedFiles,
   UploadedFile,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
@@ -42,6 +41,8 @@ export class ContactController {
     @CurrentClient() client: Client,
     @Body() createContactDto: CreateContactDto
   ) {
+    console.log(image);
+
     return this.contactService.create(
       client.id,
       createContactDto,
@@ -65,13 +66,16 @@ export class ContactController {
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('image'))
   @ApiBearerAuth()
   async update(
     @Param('id') id: string,
+    @UploadedFile()
+    image: Express.Multer.File,
     @Body() updateContactDto: UpdateContactDto,
     @CurrentClient() client: Client
   ) {
-    return this.contactService.update(id, updateContactDto, client.id);
+    return this.contactService.update(id, updateContactDto, client.id, image);
   }
 
   @HttpCode(204)
