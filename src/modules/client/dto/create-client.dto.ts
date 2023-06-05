@@ -27,9 +27,9 @@ export class CreateClientDto {
   @IsOptional()
   @ApiProperty({
     description: 'Imagem do usuário',
-    type: 'File',
+    type: String,
   })
-  image: Express.Multer.File;
+  image: string;
 
   @IsString({ message: 'O campo password deve ser um string' })
   @IsNotEmpty({ message: 'O campo password não pode estar vazio.' })
