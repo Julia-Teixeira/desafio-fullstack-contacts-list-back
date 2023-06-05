@@ -31,10 +31,7 @@ export class ClientController {
     image: Express.Multer.File,
     @Body() createClientDto: CreateClientDto
   ) {
-    return await this.clientService.create(
-      createClientDto,
-      image ? image[0] : null
-    );
+    return await this.clientService.create(createClientDto, image);
   }
 
   @Get('')
@@ -54,8 +51,6 @@ export class ClientController {
     @UploadedFile()
     image: Express.Multer.File
   ) {
-    console.log(image);
-
     return await this.clientService.update(client.id, updateClientDto, image);
   }
 

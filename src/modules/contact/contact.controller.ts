@@ -41,13 +41,7 @@ export class ContactController {
     @CurrentClient() client: Client,
     @Body() createContactDto: CreateContactDto
   ) {
-    console.log(image);
-
-    return this.contactService.create(
-      client.id,
-      createContactDto,
-      image ? image[0] : null
-    );
+    return this.contactService.create(client.id, createContactDto, image);
   }
 
   @Get('')
